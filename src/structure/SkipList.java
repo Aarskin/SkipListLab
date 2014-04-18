@@ -1,5 +1,7 @@
 package structure;
 
+import java.util.Random;
+
 public class SkipList<T extends Comparable<T>> 
 {
 	private SkipNode<T> head, tail;
@@ -57,10 +59,12 @@ public class SkipList<T extends Comparable<T>>
 			{ // If we aren't in the bottom row, drop down one
 				A = A.down;
 				B = A.right;
+				front = front.down;
+				end = end.down;
 			}
 			else // Between A and B is where the node will be inserted
 			{
-				propagate(A, B, head, tail, insert);
+				propagate(A, B, front, end, insert);
 				break;
 			}
 		} 
@@ -85,6 +89,35 @@ public class SkipList<T extends Comparable<T>>
 	private void propagate(SkipNode<T> A, SkipNode<T> B, 
 						   SkipNode<T> front, SkipNode<T> end, SkipNode<T> insert) 
 	{
+		float f;
+		int flip;
 		
+		Random random = new Random();
+		
+		do // Because we insert the first time regardless of the coin flip
+		{
+			f = random.nextFloat();
+			flip = Math.round(f);
+			
+			// Insert node at this level
+			A.linkRight(insert);
+			B.linkLeft(insert);
+			
+			if(front.up != null)
+			{ // Move up a row
+				A = A.up;
+				B = A.right;
+				front = front.up;
+				end = end.up;
+			}
+			else // Create new top level
+			{
+				A = new SkipNode<T>("HEAD");
+				B = new SkipNode<T>("TAIL");
+				front.linkUp(A);
+				end.linkUp(B);
+			}
+						
+		} while(flip != 0);
 	}
 }
