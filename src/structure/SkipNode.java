@@ -24,7 +24,13 @@ public class SkipNode<T extends Comparable<T>>
 		else
 		{
 			System.err.println("Invalid Identifier -- HEAD | TAIL");
+			System.exit(0);
 		}
+	}
+	
+	public SkipNode(T val)
+	{
+		value = val;
 	}
 	
 	/* Assign neighbors and value for a typical node */
@@ -67,4 +73,13 @@ public class SkipNode<T extends Comparable<T>>
 		other.down = this; 
 	}
 
+	public int compareTo(SkipNode<T> other)
+	{
+		if(isHead)
+			return 1;
+		else if(isTail)
+			return -1;
+		else
+			return this.value.compareTo(other.value);
+	}
 }
