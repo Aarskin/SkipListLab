@@ -82,7 +82,7 @@ public class SkipList<T extends Comparable<T>>
 	}
 
 	/* The randomized propagation upwards */
-	private void propagate(SkipNode<T> A, SkipNode<T> B, 
+	private void propagate(SkipNodestairway to heaven<T> A, SkipNode<T> B, 
 						   SkipNode<T> front, SkipNode<T> end, SkipNode<T> insert) 
 	{
 		
