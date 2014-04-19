@@ -4,7 +4,17 @@ import java.util.Random;
 
 public class SkipList<T extends Comparable<T>> 
 {
+	// Always point at the starting and ending points for a search/insert
 	private SkipNode<T> head, tail;
+	
+	// Manipulate during the search/insert
+	private SkipNode<T> front;
+	private SkipNode<T> end;
+	private SkipNode<T> A;
+	private SkipNode<T> B;
+	private SkipNode<T> value;
+	
+	private boolean foundIt;
 	
 	public SkipList()
 	{
@@ -16,21 +26,21 @@ public class SkipList<T extends Comparable<T>>
 	
 	public void insert(T val)
 	{
-		boolean foundIt = false;
+		foundIt = false;
 		
-		SkipNode<T> front = head;
-		SkipNode<T> end = tail;
-		SkipNode<T> A = head;
-		SkipNode<T> B = tail;
-		SkipNode<T> insert = new SkipNode<T>(val);
+		front = head;
+		end = tail;
+		A = head;
+		B = tail;
+		value = new SkipNode<T>(val);
 		
 		while(true) // Search for the final insertion point
 		{
 			do // Find the column where it belongs
 			{
-				if(A.compareTo(insert) < 0)
+				if(A.compareTo(value) < 0)
 				{
-					if(insert.compareTo(B) < 0) 
+					if(value.compareTo(B) < 0) 
 					{
 						break; // A < insert < B
 					}
@@ -41,7 +51,7 @@ public class SkipList<T extends Comparable<T>>
 						B = B.right;
 					}
 				}
-				else if(A.compareTo(insert) == 0)
+				else if(A.compareTo(value) == 0)
 				{
 					foundIt = true;
 					break; // It's already here
@@ -64,7 +74,7 @@ public class SkipList<T extends Comparable<T>>
 			}
 			else // Between A and B is where the node will be inserted
 			{
-				propagate(A, B, front, end, insert);
+				propagate(A, B, front, end, value);
 				break;
 			}
 		} 
@@ -75,8 +85,60 @@ public class SkipList<T extends Comparable<T>>
 		return false;
 	}
 	
-	public T find()
-	{
+	/* Returns the node in the highest row containing the value 'find' */
+	public SkipNode<T> search(T find)
+	{	
+		foundIt = false;
+		
+		front = head;
+		end = tail;
+		A = head;
+		B = tail;
+		value = new SkipNode<T>(find);
+		
+		while(true) // Until we're done
+		{
+			do // Find the column where it is (for this row)
+			{
+				if(A.compareTo(value) < 0)
+				{
+					if(value.compareTo(B) < 0) 
+					{
+						break; // A < insert < B; Need to drop down
+					}
+					else if(value.compareTo(B) > 0)
+					{
+						// Shift 'em right
+						A = A.right;
+						B = B.right;
+					}
+					else // It equals B
+					{
+						return B;
+					}
+				}
+				else if(A.compareTo(value) == 0)
+				{ // I don't think this ever fires, but just in case
+					return A;
+				}
+				else
+				{
+					System.err.println("This shouldn't be happening...");
+					System.exit(0);
+				}
+			} while(!B.isTail); // While B is not part of the TAIL column
+			
+			if(A.down != null)
+			{ // If we aren't in the bottom row, drop down one
+				A = A.down;
+				B = A.right;
+				front = front.down;
+				end = end.down;
+			}
+			else
+				break; // It's not here
+		} 
+	
 		return null;
 	}
 	
@@ -119,5 +181,9 @@ public class SkipList<T extends Comparable<T>>
 			}
 						
 		} while(flip != 0);
+		
+		// Don't forget to update the global head and tail for the list
+		head = A;
+		tail = B;
 	}
 }
