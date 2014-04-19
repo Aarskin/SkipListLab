@@ -3,6 +3,7 @@ package structure;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Testbench {
@@ -25,7 +26,8 @@ public class Testbench {
 	// - Random
 	//
 	//SEARCH
-	// - 
+	// - Get number of comparisons used in search
+	//     for ~every~ number in data set
 	// 
 	
 	public static void main(String[] args) {
@@ -39,6 +41,7 @@ public class Testbench {
 			writer.println("RUNTIME DATA SET: [0," + RUNTIME_DATA_SET + "]");
 			writer.println("INSERT COUNT: " + INSERT_COUNT);
 			writer.println(skipList.print());
+			writer.println(searchComparisons());
 			writer.println();
 
 			System.out.println("Running clusteredValues");
@@ -152,6 +155,20 @@ public class Testbench {
 				i ++;
 			}
 		}
+	}
+	
+	public static String searchComparisons() {
+		ArrayList<Integer> searchTimes = new ArrayList<Integer>();
+		for (int i = 0; i < RUNTIME_DATA_SET; i++) {
+			searchTimes.add(skipList.search(i));
+		}
+		
+		int sum = 0;
+		for (int time : searchTimes) {
+			sum += time;
+		}
+		
+		return "Average comparisons: " + (sum / searchTimes.size());
 	}
 
 }

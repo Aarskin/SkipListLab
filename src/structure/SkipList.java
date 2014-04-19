@@ -86,8 +86,11 @@ public class SkipList<T extends Comparable<T>>
 	}
 	
 	/* Returns the node in the highest row containing the value 'find' */
-	public SkipNode<T> search(T find)
+	//public SkipNode<T> search(T find)
+	public int search(T find)
 	{	
+		int comparisons = 0;
+		
 		foundIt = false;
 		
 		front = head;
@@ -100,8 +103,10 @@ public class SkipList<T extends Comparable<T>>
 		{
 			do // Find the column where it is (for this row)
 			{
+				comparisons ++;
 				if(A.compareTo(value) < 0)
 				{
+					comparisons ++;
 					if(value.compareTo(B) < 0) 
 					{
 						break; // A < insert < B; Need to drop down
@@ -114,12 +119,14 @@ public class SkipList<T extends Comparable<T>>
 					}
 					else // It equals B
 					{
-						return B;
+						//return B;
+						return comparisons;
 					}
 				}
 				else if(A.compareTo(value) == 0)
 				{ // I don't think this ever fires, but just in case
-					return A;
+					//return A;
+					return comparisons;
 				}
 				else
 				{
@@ -139,7 +146,8 @@ public class SkipList<T extends Comparable<T>>
 				break; // It's not here
 		} 
 	
-		return null;
+		//return null;
+		return 0;
 	}
 	
 	public String print()
