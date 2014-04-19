@@ -144,7 +144,54 @@ public class SkipList<T extends Comparable<T>>
 	
 	public String print()
 	{
-		return "";
+		int height = 0, width = 0;
+		A = head;
+		
+		while (A.down != null) {
+			A = A.down;
+			height ++;
+		}
+		
+		while (A.right != null) {
+			A = A.right;
+			width++;
+		}
+		
+		char[][] map = new char[height][width];
+		for (int i = 0; i < map.length; i++) 
+			for (int j = 0; j < map[0].length; j++)
+				map[i][j] = 'o';
+
+		A = head;
+		while (A.down != null)
+			A = A.down;
+		
+		int x = 0;
+		while (A.right != null) {
+			map[0][x] = 'x';
+			
+			int y = 0;
+			B = A;
+			while (B.up != null) {
+				map[y][x] = 'x';
+				B = B.up;
+				y ++;
+			}
+			
+			A = A.right;
+			x ++;
+		}
+		
+		String out = "";
+		for (int i = map.length - 1; i >= 0; i--) {
+			for (int j = 0; j < map[0].length - 1; j++) {
+				out += map[i][j];
+			}
+			
+			out += "\n";
+		}
+		
+		return out;
 	}
 
 	/* The randomized propagation upwards */
