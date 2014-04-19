@@ -76,9 +76,9 @@ public class SkipNode<T extends Comparable<T>>
 	public int compareTo(SkipNode<T> other)
 	{
 		if(isHead)
-			return 1;
-		else if(isTail)
 			return -1;
+		else if(isTail)
+			return 1;
 		else
 			return this.value.compareTo(other.value);
 	}
