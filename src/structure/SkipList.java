@@ -76,9 +76,9 @@ public class SkipList<T extends Comparable<T>>
 		return null;
 	}
 	
-	public void print()
+	public String print()
 	{
-		
+		return "";
 	}
 
 	/* The randomized propagation upwards */
