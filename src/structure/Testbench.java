@@ -9,7 +9,7 @@ public class Testbench {
 	
 	//** BEGIN TEST CONFIGURATION VARIABLES **//
 	static int RUNTIME_DATA_SET = 1000;   // (0, RUNTIME_DATA_SET)
-	static int TEST_DURATION    = 1000;   // How many iterations to run tests
+	static int INSERT_COUNT     = 1000;   // How many iterations to run tests
 	//** END TEST CONFIGURATION VARIABLES **//
 	
 	//** INSTANTIATE SKIPLIST **//
@@ -27,11 +27,38 @@ public class Testbench {
 	public static void main(String[] args) {
 		PrintWriter writer;
 		try {
-			writer = new PrintWriter("the-file-name.txt", "UTF-8");
+			writer = new PrintWriter("run_report" + System.currentTimeMillis() + ".txt", "UTF-8");
 
-			randomInsert(TEST_DURATION);
+			randomInsert(INSERT_COUNT);
+			writer.println("TEST: randomInsert");
+			writer.println("RUNTIME DATA SET: [0," + RUNTIME_DATA_SET + "]");
+			writer.println("INSERT COUNT: " + INSERT_COUNT);
 			writer.println(skipList.print());
+			writer.println();
+			
 			skipList = new SkipList<Integer>();
+			clusteredValues(INSERT_COUNT);
+			writer.println("TEST: clusteredValues");
+			writer.println("RUNTIME DATA SET: [0," + RUNTIME_DATA_SET + "]");
+			writer.println("INSERT COUNT: " + INSERT_COUNT);
+			writer.println(skipList.print());
+			writer.println();
+			
+			skipList = new SkipList<Integer>();
+			increasingOrder(INSERT_COUNT, false);
+			writer.println("TEST: increasingOrder (no repeats)");
+			writer.println("RUNTIME DATA SET: [0," + RUNTIME_DATA_SET + "]");
+			writer.println("INSERT COUNT: " + INSERT_COUNT);
+			writer.println(skipList.print());
+			writer.println();		
+			
+			skipList = new SkipList<Integer>();
+			increasingOrder(INSERT_COUNT, true);
+			writer.println("TEST: increasingOrder (repeats)");
+			writer.println("RUNTIME DATA SET: [0," + RUNTIME_DATA_SET + "]");
+			writer.println("INSERT COUNT: " + INSERT_COUNT);
+			writer.println(skipList.print());
+			writer.println();
 			
 			writer.close();
 		} catch (FileNotFoundException e) {
@@ -50,7 +77,7 @@ public class Testbench {
 			skipList.insert(r.nextInt(RUNTIME_DATA_SET));
 	}
 	
-	public void increasingOrder(int count, boolean repeat) {
+	public static void increasingOrder(int count, boolean repeat) {
 		Random r = new Random();
 		
 		if (repeat)
@@ -70,15 +97,17 @@ public class Testbench {
 		}
 	}
 	
-	public void clusteredValues(int count) {
+	public static void clusteredValues(int count) {
 		Random r = new Random();
 		int clusterVal;
 		
 		for (int i = 0; i < count; i++) {
 			clusterVal = r.nextInt(RUNTIME_DATA_SET);
 			
-			for (int j = 0; j < r.nextInt(count / 50); j++)
+			for (int j = 0; j < r.nextInt(count / 50); j++) {
 				skipList.insert(clusterVal);
+				i ++;
+			}
 		}
 	}
 
