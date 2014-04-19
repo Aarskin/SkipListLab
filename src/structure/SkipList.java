@@ -190,6 +190,9 @@ public class SkipList<T extends Comparable<T>>
 			
 			out += "\n";
 		}
+
+		out += "HEIGHT: " + height + "\n";
+		out += "WIDTH: " + width + "\n";
 		
 		return out;
 	}

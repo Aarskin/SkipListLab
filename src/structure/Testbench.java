@@ -8,8 +8,8 @@ import java.util.Random;
 public class Testbench {
 	
 	//** BEGIN TEST CONFIGURATION VARIABLES **//
-	static int RUNTIME_DATA_SET = 1000;   // (0, RUNTIME_DATA_SET) // should always be bigger than insert count
-	static int INSERT_COUNT     = 10;   // How many iterations to run tests
+	static int RUNTIME_DATA_SET = 1000;   // (0, RUNTIME_DATA_SET) should always be bigger than insert count
+	static int INSERT_COUNT     = 100;   // How many iterations to run tests
 	//** END TEST CONFIGURATION VARIABLES **//
 	
 	//** INSTANTIATE SKIPLIST **//
@@ -19,12 +19,14 @@ public class Testbench {
 	//INSERT
 	// - Increasing order without repeats
 	// - Increasing order with repeats
-	// - Clustered values between 1..1000
-	// - Much larger data set
-	// - Random inserts
 	// - Decreasing order without repeats
 	// - Decreasing order with repeats
+	// - Clustered values
+	// - Random
 	//
+	//SEARCH
+	// - 
+	// 
 	
 	public static void main(String[] args) {
 		PrintWriter writer;
