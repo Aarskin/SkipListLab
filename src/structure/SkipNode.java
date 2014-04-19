@@ -2,7 +2,7 @@ package structure;
 
 public class SkipNode<T extends Comparable<T>> 
 {
-	Boolean isHead, isTail; // Null if this is a typical node
+	Boolean isHead, isTail;
 	
 	SkipNode<T> left;	// Null for HEAD
 	SkipNode<T> right;	// Null for TAIL
@@ -16,9 +16,11 @@ public class SkipNode<T extends Comparable<T>>
 		if(terminal.equals("HEAD"))
 		{
 			isHead = true;
+			isTail = false;
 		}
 		else if(terminal.equals("TAIL"))
 		{
+			isHead = false;
 			isTail = true;
 		}
 		else
@@ -31,6 +33,8 @@ public class SkipNode<T extends Comparable<T>>
 	public SkipNode(T val)
 	{
 		value = val;
+		isHead = false;
+		isTail = false;
 	}
 	
 	/* Assign neighbors and value for a typical node */
@@ -72,14 +76,25 @@ public class SkipNode<T extends Comparable<T>>
 		down = other;
 		other.down = this; 
 	}
+	
+	public SkipNode<T> clone()
+	{
+		return new SkipNode<T>(value);
+	}
 
 	public int compareTo(SkipNode<T> other)
 	{
 		if(isHead)
+		{
 			return -1;
-		else if(isTail)
+		}
+		else if(other.isTail)
+		{
 			return 1;
+		}
 		else
+		{
 			return this.value.compareTo(other.value);
+		}
 	}
 }

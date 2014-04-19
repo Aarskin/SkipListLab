@@ -26,6 +26,7 @@ public class SkipList<T extends Comparable<T>>
 	
 	public void insert(T val)
 	{
+		System.out.println("------Start Insert------");
 		foundIt = false;
 		
 		front = head;
@@ -36,11 +37,17 @@ public class SkipList<T extends Comparable<T>>
 		
 		while(true) // Search for the final insertion point
 		{
+			System.out.println("LOOP");
+			
 			do // Find the column where it belongs
 			{
+				System.out.println("A is: " + A.value);
+				System.out.println("Value is: " + value.value);
+				System.out.println("B is: " + B.value);
+				
 				if(A.compareTo(value) < 0)
-				{
-					if(value.compareTo(B) < 0) 
+				{					
+					if(value.compareTo(B) > 0) 
 					{
 						break; // A < insert < B
 					}
@@ -67,6 +74,7 @@ public class SkipList<T extends Comparable<T>>
 				break;
 			else if(A.down != null)
 			{ // If we aren't in the bottom row, drop down one
+				System.out.println("DROP");
 				A = A.down;
 				B = A.right;
 				front = front.down;
@@ -74,10 +82,13 @@ public class SkipList<T extends Comparable<T>>
 			}
 			else // Between A and B is where the node will be inserted
 			{
+				System.out.println("FOUND INSERTION POINT");
 				propagate(A, B, front, end, value);
 				break;
 			}
-		} 
+		}
+
+		System.out.println("------Finish Insert------");
 	}
 	
 	public boolean delete()
@@ -148,42 +159,87 @@ public class SkipList<T extends Comparable<T>>
 	}
 
 	/* The randomized propagation upwards */
-	private void propagate(SkipNode<T> A, SkipNode<T> B, 
-						   SkipNode<T> front, SkipNode<T> end, SkipNode<T> insert) 
+	private void propagate(SkipNode<T> A_prop, SkipNode<T> B_prop, 
+						   SkipNode<T> front_prop, SkipNode<T> end_prop, 
+						   SkipNode<T> insert) 
 	{
-		float f;
-		int flip;
-		
+		SkipNode<T> clone, rowBelow;
 		Random random = new Random();
+		float f = random.nextFloat();
+		int flip = Math.round(f);
 		
-		do // Because we insert the first time regardless of the coin flip
+		A_prop.linkRight(insert);
+		B_prop.linkLeft(insert);
+		rowBelow = insert;
+		
+		System.out.println("Flip = " + flip);
+		while(flip != 0)
 		{
-			f = random.nextFloat();
-			flip = Math.round(f);
-			
+			System.out.println("HEADS");
+			clone = insert.clone();
+
 			// Insert node at this level
-			A.linkRight(insert);
-			B.linkLeft(insert);
+			A_prop.linkRight(clone);
+			B_prop.linkLeft(clone);
+			clone.linkDown(rowBelow);
 			
-			if(front.up != null)
+			System.out.println("After Link");
+			System.out.println(A_prop.right);
+			System.out.println(insert);
+			System.out.println(insert.right);
+			System.out.println(B_prop);
+			
+			if(A_prop.up != null)
 			{ // Move up a row
-				A = A.up;
-				B = A.right;
-				front = front.up;
-				end = end.up;
+				System.out.println("A up");
+				A_prop = A_prop.up;
+				B_prop = A_prop.right;
+				front_prop = front_prop.up;
+				end_prop = end_prop.up;
+				rowBelow = clone;
+			}
+			else if(front_prop.up != null)
+			{
+				System.out.println("Front up");
+				while(A_prop.up == null)
+				{	// Find the closest node to the left that
+					// has a copy in the above level
+					A_prop = A_prop.left;
+				}
+				
+				A_prop = A_prop.up;
+				B_prop = A_prop.right;
+				front_prop = front_prop.up;
+				end_prop = end_prop.up;
+				rowBelow = clone;
 			}
 			else // Create new top level
 			{
-				A = new SkipNode<T>("HEAD");
-				B = new SkipNode<T>("TAIL");
-				front.linkUp(A);
-				end.linkUp(B);
+				System.out.println("New row");
+				// Make new terminal nodes
+				A_prop = new SkipNode<T>("HEAD");
+				B_prop = new SkipNode<T>("TAIL");
+				// Link them to the current ones
+				front_prop.linkUp(A_prop);
+				end_prop.linkUp(B_prop);
+				// Update current
+				front_prop = front_prop.up;
+				end_prop = end_prop.up;
+				// Link 'em
+				front_prop.linkRight(end_prop);
+				// To be sure
+				A_prop = front_prop;
+				B_prop = end_prop;
+				
+				rowBelow = clone;
 			}
-						
-		} while(flip != 0);
+			
+			f = random.nextFloat();
+			flip = Math.round(f);		
+		}
 		
 		// Don't forget to update the global head and tail for the list
-		head = A;
-		tail = B;
+		head = front_prop;
+		tail = end_prop;
 	}
 }

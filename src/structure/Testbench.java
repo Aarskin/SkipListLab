@@ -9,7 +9,7 @@ public class Testbench {
 	
 	//** BEGIN TEST CONFIGURATION VARIABLES **//
 	static int RUNTIME_DATA_SET = 1000;   // (0, RUNTIME_DATA_SET)
-	static int INSERT_COUNT     = 1000;   // How many iterations to run tests
+	static int INSERT_COUNT     = 10;   // How many iterations to run tests
 	//** END TEST CONFIGURATION VARIABLES **//
 	
 	//** INSTANTIATE SKIPLIST **//
