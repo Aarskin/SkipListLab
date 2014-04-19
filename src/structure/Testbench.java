@@ -9,7 +9,7 @@ public class Testbench {
 	
 	//** BEGIN TEST CONFIGURATION VARIABLES **//
 	static int RUNTIME_DATA_SET = 1000;   // (0, RUNTIME_DATA_SET)
-	static int INSERT_COUNT     = 1000;   // How many iterations to run tests
+	static int INSERT_COUNT     = 10;   // How many iterations to run tests
 	//** END TEST CONFIGURATION VARIABLES **//
 	
 	//** INSTANTIATE SKIPLIST **//
@@ -29,13 +29,15 @@ public class Testbench {
 		try {
 			writer = new PrintWriter("run_report" + System.currentTimeMillis() + ".txt", "UTF-8");
 
+			System.out.println("Running randomInsert");
 			randomInsert(INSERT_COUNT);
 			writer.println("TEST: randomInsert");
 			writer.println("RUNTIME DATA SET: [0," + RUNTIME_DATA_SET + "]");
 			writer.println("INSERT COUNT: " + INSERT_COUNT);
 			writer.println(skipList.print());
 			writer.println();
-			
+
+			System.out.println("Running clusteredValues");
 			skipList = new SkipList<Integer>();
 			clusteredValues(INSERT_COUNT);
 			writer.println("TEST: clusteredValues");
@@ -43,7 +45,8 @@ public class Testbench {
 			writer.println("INSERT COUNT: " + INSERT_COUNT);
 			writer.println(skipList.print());
 			writer.println();
-			
+
+			System.out.println("Running increasingOrder (no repeats)");
 			skipList = new SkipList<Integer>();
 			increasingOrder(INSERT_COUNT, false);
 			writer.println("TEST: increasingOrder (no repeats)");
@@ -51,7 +54,8 @@ public class Testbench {
 			writer.println("INSERT COUNT: " + INSERT_COUNT);
 			writer.println(skipList.print());
 			writer.println();		
-			
+
+			System.out.println("Running increasingOrder (repeats)");
 			skipList = new SkipList<Integer>();
 			increasingOrder(INSERT_COUNT, true);
 			writer.println("TEST: increasingOrder (repeats)");
