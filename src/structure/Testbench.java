@@ -8,7 +8,7 @@ import java.util.Random;
 public class Testbench {
 	
 	//** BEGIN TEST CONFIGURATION VARIABLES **//
-	static int RUNTIME_DATA_SET = 1000;   // (0, RUNTIME_DATA_SET)
+	static int RUNTIME_DATA_SET = 1000;   // (0, RUNTIME_DATA_SET) // should always be bigger than insert count
 	static int INSERT_COUNT     = 10;   // How many iterations to run tests
 	//** END TEST CONFIGURATION VARIABLES **//
 	
@@ -16,12 +16,14 @@ public class Testbench {
 	static SkipList<Integer> skipList = new SkipList<Integer>();
 	
 	//** AVAILABLE TESTS **//
-	// Insert 1..1000 into skiplist in variety of ways
+	//INSERT
 	// - Increasing order without repeats
 	// - Increasing order with repeats
 	// - Clustered values between 1..1000
 	// - Much larger data set
 	// - Random inserts
+	// - Decreasing order without repeats
+	// - Decreasing order with repeats
 	//
 	
 	public static void main(String[] args) {
@@ -62,6 +64,24 @@ public class Testbench {
 			writer.println("RUNTIME DATA SET: [0," + RUNTIME_DATA_SET + "]");
 			writer.println("INSERT COUNT: " + INSERT_COUNT);
 			writer.println(skipList.print());
+			writer.println();	
+
+			System.out.println("Running decreasingOrder (no repeats)");
+			skipList = new SkipList<Integer>();
+			decreasingOrder(INSERT_COUNT, true);
+			writer.println("TEST: decreasingOrder (no repeats)");
+			writer.println("RUNTIME DATA SET: [0," + RUNTIME_DATA_SET + "]");
+			writer.println("INSERT COUNT: " + INSERT_COUNT);
+			writer.println(skipList.print());
+			writer.println();	
+
+			System.out.println("Running decreasingOrder (repeats)");
+			skipList = new SkipList<Integer>();
+			decreasingOrder(INSERT_COUNT, true);
+			writer.println("TEST: decreasingOrder (repeats)");
+			writer.println("RUNTIME DATA SET: [0," + RUNTIME_DATA_SET + "]");
+			writer.println("INSERT COUNT: " + INSERT_COUNT);
+			writer.println(skipList.print());
 			writer.println();
 			
 			writer.close();
@@ -84,7 +104,7 @@ public class Testbench {
 	public static void increasingOrder(int count, boolean repeat) {
 		Random r = new Random();
 		
-		if (repeat)
+		if (!repeat)
 			for (int i = 0; i < count; i++)
 				skipList.insert(i);
 		else {
@@ -93,10 +113,27 @@ public class Testbench {
 				do {
 					t = r.nextInt(RUNTIME_DATA_SET);
 				}
-				while (t >= biggest);
+				while (t <= biggest);
 				
-				biggest = t;
-				skipList.insert(t);
+				skipList.insert(biggest = t);
+			}
+		}
+	}
+	
+	public static void decreasingOrder(int count, boolean repeat) {
+		Random r = new Random();
+		
+		if (!repeat)
+			for (int i = count; i > 0; i--)
+				skipList.insert(i);
+		else {
+			int smallest = RUNTIME_DATA_SET, t;
+			for (int i = count; i > 0; i--) {
+				do {
+					t = r.nextInt(RUNTIME_DATA_SET);
+				} while (t >= smallest);
+				
+				skipList.insert(smallest = t);
 			}
 		}
 	}
