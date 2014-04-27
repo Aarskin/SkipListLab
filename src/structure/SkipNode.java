@@ -37,18 +37,6 @@ public class SkipNode<T extends Comparable<T>>
 		isTail = false;
 	}
 	
-	/* Assign neighbors and value for a typical node */
-	public SkipNode(SkipNode<T> left, SkipNode<T> right, SkipNode<T> up,
-					SkipNode<T> down, T value)
-	{
-		this.left = left;
-		this.right = right;
-		this.up = up;
-		this.down = down;
-		
-		this.value = value;
-	}
-
 	/* Creates an edge between this node and the one to the right */
 	public void linkRight(SkipNode<T> other)
 	{
@@ -67,14 +55,14 @@ public class SkipNode<T extends Comparable<T>>
 	public void linkUp(SkipNode<T> other)
 	{
 		up = other;
-		other.up = this; 
+		other.down = this; 
 	}
 	
 	/* Creates an edge between this node and the one to the down */
 	public void linkDown(SkipNode<T> other)
 	{
 		down = other;
-		other.down = this; 
+		other.up = this; 
 	}
 	
 	public SkipNode<T> clone()
@@ -84,11 +72,11 @@ public class SkipNode<T extends Comparable<T>>
 
 	public int compareTo(SkipNode<T> other)
 	{
-		if(isHead)
+		if(isHead || other.isTail)
 		{
 			return -1;
 		}
-		else if(other.isTail)
+		else if(other.isHead || isTail)
 		{
 			return 1;
 		}

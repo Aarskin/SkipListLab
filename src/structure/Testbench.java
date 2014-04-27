@@ -33,7 +33,7 @@ public class Testbench {
 			writer.println("TEST: randomInsert");
 			writer.println("RUNTIME DATA SET: [0," + RUNTIME_DATA_SET + "]");
 			writer.println("INSERT COUNT: " + INSERT_COUNT);
-			writer.println(skipList.print());
+			//writer.println(skipList.print());
 			writer.println();
 			
 			skipList = new SkipList<Integer>();
@@ -41,7 +41,7 @@ public class Testbench {
 			writer.println("TEST: clusteredValues");
 			writer.println("RUNTIME DATA SET: [0," + RUNTIME_DATA_SET + "]");
 			writer.println("INSERT COUNT: " + INSERT_COUNT);
-			writer.println(skipList.print());
+			//writer.println(skipList.print());
 			writer.println();
 			
 			skipList = new SkipList<Integer>();
@@ -49,7 +49,7 @@ public class Testbench {
 			writer.println("TEST: increasingOrder (no repeats)");
 			writer.println("RUNTIME DATA SET: [0," + RUNTIME_DATA_SET + "]");
 			writer.println("INSERT COUNT: " + INSERT_COUNT);
-			writer.println(skipList.print());
+			//writer.println(skipList.print());
 			writer.println();		
 			
 			skipList = new SkipList<Integer>();
@@ -57,7 +57,7 @@ public class Testbench {
 			writer.println("TEST: increasingOrder (repeats)");
 			writer.println("RUNTIME DATA SET: [0," + RUNTIME_DATA_SET + "]");
 			writer.println("INSERT COUNT: " + INSERT_COUNT);
-			writer.println(skipList.print());
+			//writer.println(skipList.print());
 			writer.println();
 			
 			writer.close();
@@ -101,7 +101,7 @@ public class Testbench {
 		Random r = new Random();
 		int clusterVal;
 		
-		for (int i = 0; i < count; i++) {
+		for (int i = 1; i < count; i++) {
 			clusterVal = r.nextInt(RUNTIME_DATA_SET);
 			
 			for (int j = 0; j < r.nextInt(count / 50); j++) {
