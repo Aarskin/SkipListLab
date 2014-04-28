@@ -4,15 +4,15 @@ import java.util.Random;
 
 public class SkipList<T extends Comparable<T>> 
 {
-	// Always point at the starting and ending points for a search/insert
+	// The starting pair used for search/insert
 	private SkipNode<T> head, tail;
 	
 	// Manipulate during the search/insert
-	private SkipNode<T> front;
-	private SkipNode<T> end;
-	private SkipNode<T> A;
-	private SkipNode<T> B;
-	private SkipNode<T> value;
+	private SkipNode<T> front; // of the row
+	private SkipNode<T> end;   // of the col
+	private SkipNode<T> A;	   // left check
+	private SkipNode<T> B;	   // right check
+	private SkipNode<T> value; // value being inserted
 	
 	private boolean foundIt;
 	
@@ -26,20 +26,28 @@ public class SkipList<T extends Comparable<T>>
 	
 	public void insert(T val)
 	{
+		System.out.println("Insert: " + val);
 		foundIt = false;
 		
+		// Run to the end of this row
+		SkipNode<T> temp = tail;
+		while(!temp.isTail)
+		{
+			temp = temp.right;
+		}
+		
 		front = head;
-		end = tail;
+		end = temp; // The true end of this row
 		A = head;
 		B = tail;
 		value = new SkipNode<T>(val);
 		
 		while(true) // Search for the final insertion point
-		{
+		{			
 			do // Find the column where it belongs
-			{
+			{				
 				if(A.compareTo(value) < 0)
-				{
+				{					
 					if(value.compareTo(B) < 0) 
 					{
 						break; // A < insert < B
@@ -64,7 +72,7 @@ public class SkipList<T extends Comparable<T>>
 			} while(!B.isTail); // While B is not part of the TAIL column
 			
 			if(foundIt)
-				break;
+				break; // The 'insert' is done
 			else if(A.down != null)
 			{ // If we aren't in the bottom row, drop down one
 				A = A.down;
@@ -74,15 +82,11 @@ public class SkipList<T extends Comparable<T>>
 			}
 			else // Between A and B is where the node will be inserted
 			{
+				System.out.println("insertison point found: " + A.value + " >-< " + B.value);
 				propagate(A, B, front, end, value);
 				break;
 			}
-		} 
-	}
-	
-	public boolean delete()
-	{
-		return false;
+		}
 	}
 	
 	/* Returns the node in the highest row containing the value 'find' */
@@ -152,6 +156,7 @@ public class SkipList<T extends Comparable<T>>
 	
 	public String print()
 	{
+		System.out.println("Beginning print");
 		int height = 0, width = 0;
 		A = head;
 		
@@ -168,7 +173,7 @@ public class SkipList<T extends Comparable<T>>
 		char[][] map = new char[height][width];
 		for (int i = 0; i < map.length; i++) 
 			for (int j = 0; j < map[0].length; j++)
-				map[i][j] = 'o';
+				map[i][j] = ' ';
 
 		A = head;
 		while (A.down != null)
@@ -202,46 +207,118 @@ public class SkipList<T extends Comparable<T>>
 		out += "HEIGHT: " + height + "\n";
 		out += "WIDTH: " + width + "\n";
 		
+		System.out.println("End Skip List Print");
 		return out;
 	}
 
 	/* The randomized propagation upwards */
-	private void propagate(SkipNode<T> A, SkipNode<T> B, 
-						   SkipNode<T> front, SkipNode<T> end, SkipNode<T> insert) 
+	private void propagate(SkipNode<T> A_prop, SkipNode<T> B_prop, 
+						   SkipNode<T> front_prop, SkipNode<T> end_prop, 
+						   SkipNode<T> insert) 
 	{
-		float f;
-		int flip;
-		
+		SkipNode<T> clone, rowBelow;
 		Random random = new Random();
+		float f = random.nextFloat();
+		int flip = Math.round(f);
 		
-		do // Because we insert the first time regardless of the coin flip
+		A_prop.linkRight(insert);
+		B_prop.linkLeft(insert);
+		rowBelow = insert;
+		
+		while(flip != 0)
 		{
-			f = random.nextFloat();
-			flip = Math.round(f);
+			clone = insert.clone();
 			
-			// Insert node at this level
-			A.linkRight(insert);
-			B.linkLeft(insert);
-			
-			if(front.up != null)
+			if(A_prop.up != null)
 			{ // Move up a row
-				A = A.up;
-				B = A.right;
-				front = front.up;
-				end = end.up;
+				A_prop = A_prop.up;
+				B_prop = A_prop.right;
+				front_prop = front_prop.up;
+				end_prop = end_prop.up;
+				System.out.println(A_prop.value);
+				System.out.println("Path 1");
+			}
+			else if(front_prop.up != null)
+			{ // Move up a row (more calculating)
+				while(A_prop.up == null)
+				{	// Find the closest node to the left that
+					// has a copy in the above level
+					A_prop = A_prop.left;
+					System.out.println(A_prop.value);
+				}
+				
+				A_prop = A_prop.up;
+				B_prop = A_prop.right;
+				front_prop = front_prop.up;
+				end_prop = end_prop.up;
+				System.out.println("Path 2");
 			}
 			else // Create new top level
 			{
-				A = new SkipNode<T>("HEAD");
-				B = new SkipNode<T>("TAIL");
-				front.linkUp(A);
-				end.linkUp(B);
+				// Make new terminal nodes
+				A_prop = new SkipNode<T>("HEAD");
+				B_prop = new SkipNode<T>("TAIL");
+				// Link them to the current ones
+				front_prop.linkUp(A_prop);
+				end_prop.linkUp(B_prop);
+				// Update current front/end
+				front_prop = A_prop;
+				end_prop = B_prop;
+				// Link 'em
+				front_prop.linkRight(end_prop);
+				System.out.println("Path 3");
 			}
-						
-		} while(flip != 0);
+
+			System.out.println("Instertion after : " + A_prop.value + "(" + A_prop.isTail + ")");
+			// Insert node at this level
+			A_prop.linkRight(clone);
+			B_prop.linkLeft(clone);
+			clone.linkDown(rowBelow);
+			rowBelow = clone;
+			
+			f = random.nextFloat();
+			flip = Math.round(f);		
+		}
 		
 		// Don't forget to update the global head and tail for the list
-		head = A;
-		tail = B;
+		while(front_prop.up != null)
+		{
+			front_prop = front_prop.up;
+		}
+		head = front_prop;
+		tail = head.right;
 	}
+	
+	public String toString()
+	{
+		String list = "";
+		
+		return list;
+	}
+	
+/*	public void print()
+	{
+		SkipNode<T> start = head;
+		System.out.println("--------------------------------------------------------------");
+		
+		while(start != null)
+		{
+			System.out.print(start.value);
+			System.out.print(" --- ");
+			SkipNode<T> curr = start.right;
+			
+			while(!curr.isTail)
+			{
+				System.out.print(curr.value);
+				System.out.print(" --- ");
+				curr = curr.right;
+			}
+			
+			System.out.print(curr.value);
+			System.out.println();
+			
+			start = start.down;
+		}
+		System.out.println("--------------------------------------------------------------");
+	}*/
 }
