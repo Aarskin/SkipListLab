@@ -33,6 +33,7 @@ public class SkipList<T extends Comparable<T>>
 		SkipNode<T> temp = tail;
 		while(!temp.isTail)
 		{
+			System.out.println("Failpoint 9");
 			temp = temp.right;
 		}
 		
@@ -44,8 +45,10 @@ public class SkipList<T extends Comparable<T>>
 		
 		while(true) // Search for the final insertion point
 		{			
+			System.out.println("Failpoint 5");
 			do // Find the column where it belongs
-			{				
+			{			
+				System.out.println("Failpoint 12");
 				if(A.compareTo(value) < 0)
 				{					
 					if(value.compareTo(B) < 0) 
@@ -82,17 +85,22 @@ public class SkipList<T extends Comparable<T>>
 			}
 			else // Between A and B is where the node will be inserted
 			{
-				System.out.println("insertison point found: " + A.value + " >-< " + B.value);
+				System.out.println("Insertion point found: " + A.value + " >-< " + B.value);
+				System.out.println("Failpoint 6");
 				propagate(A, B, front, end, value);
-				print();
+				System.out.println("Failpoint 7");
 				break;
 			}
 		}
+		
+		System.out.println("Failpoint 8");
 	}
 	
 	/* Returns the node in the highest row containing the value 'find' */
-	public boolean search(T find)
+	public int search(T find)
 	{	
+		int comparisons = 0;
+		
 		foundIt = false;
 		
 		front = head;
@@ -103,10 +111,14 @@ public class SkipList<T extends Comparable<T>>
 		
 		while(true) // Until we're done
 		{
+			System.out.println("Failpoint 10");
 			do // Find the column where it is (for this row)
 			{
+				System.out.println("Failpoint 11");
+				comparisons ++;
 				if(A.compareTo(value) < 0)
 				{
+					comparisons ++;
 					if(value.compareTo(B) < 0) 
 					{
 						break; // A < insert < B; Need to drop down
@@ -119,12 +131,14 @@ public class SkipList<T extends Comparable<T>>
 					}
 					else // It equals B
 					{
-						return true;
+						//return B;
+						return comparisons;
 					}
 				}
 				else if(A.compareTo(value) == 0)
 				{ // I don't think this ever fires, but just in case
-					return true;
+					//return A;
+					return comparisons;
 				}
 				else
 				{
@@ -140,9 +154,67 @@ public class SkipList<T extends Comparable<T>>
 				front = front.down;
 				end = end.down;
 			}
-			else
-				return false; // It's not here
+			else	// It's not here
+				break;
 		} 
+		//return null;
+		return 0;
+	}
+	
+	public String toString()
+	{
+		System.out.println("Begin toString");
+		int height = 0, width = 0;
+		A = head;
+		
+		while (A.down != null) {
+			A = A.down;
+			height ++;
+		}
+		
+		while (A.right != null) {
+			A = A.right;
+			width++;
+		}
+		
+		char[][] map = new char[height][width];
+		for (int i = 0; i < map.length; i++) 
+			for (int j = 0; j < map[0].length; j++)
+				map[i][j] = ' ';
+
+		A = head;
+		while (A.down != null)
+			A = A.down;
+		
+		int x = 0;
+		while (A.right != null) {
+			map[0][x] = '.';
+			
+			int y = 0;
+			B = A;
+			while (B.up != null) {
+				map[y][x] = '.';
+				B = B.up;
+				y ++;
+			}
+			
+			A = A.right;
+			x ++;
+		}
+		
+		String out = "";
+		for (int i = map.length - 1; i >= 0; i--) {
+			for (int j = 0; j < map[0].length - 1; j++) {
+				out += map[i][j];
+			}
+			
+			out += "\n";
+		}
+
+		out += "HEIGHT: " + height + "\n";
+		out += "WIDTH: " + width + "\n";
+		System.out.println("End toString");
+		return out;
 	}
 
 	/* The randomized propagation upwards */
@@ -159,8 +231,10 @@ public class SkipList<T extends Comparable<T>>
 		B_prop.linkLeft(insert);
 		rowBelow = insert;
 		
+		System.out.println("Failpoint 1");
 		while(flip != 0)
 		{
+			System.out.println("Failpoint 2");
 			clone = insert.clone();
 			
 			if(A_prop.up != null)
@@ -203,7 +277,7 @@ public class SkipList<T extends Comparable<T>>
 				System.out.println("Path 3");
 			}
 
-			System.out.println("Instertion after : " + A_prop.value + "(" + A_prop.isTail + ")");
+			System.out.println("Insertion after: " + A_prop.value + " (" + A_prop.isTail + ")");
 			// Insert node at this level
 			A_prop.linkRight(clone);
 			B_prop.linkLeft(clone);
@@ -217,17 +291,12 @@ public class SkipList<T extends Comparable<T>>
 		// Don't forget to update the global head and tail for the list
 		while(front_prop.up != null)
 		{
+			System.out.println("Failpoint 3");
 			front_prop = front_prop.up;
 		}
 		head = front_prop;
 		tail = head.right;
-	}
-	
-	public String toString()
-	{
-		String list = "";
-		
-		return list;
+		System.out.println("Failpoint 4");
 	}
 	
 	public void print()
