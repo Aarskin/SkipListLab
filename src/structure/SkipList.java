@@ -91,7 +91,7 @@ public class SkipList<T extends Comparable<T>>
 	}
 	
 	/* Returns the node in the highest row containing the value 'find' */
-	public SkipNode<T> search(T find)
+	public boolean search(T find)
 	{	
 		foundIt = false;
 		
@@ -119,12 +119,12 @@ public class SkipList<T extends Comparable<T>>
 					}
 					else // It equals B
 					{
-						return B;
+						return true;
 					}
 				}
 				else if(A.compareTo(value) == 0)
 				{ // I don't think this ever fires, but just in case
-					return A;
+					return true;
 				}
 				else
 				{
@@ -141,10 +141,8 @@ public class SkipList<T extends Comparable<T>>
 				end = end.down;
 			}
 			else
-				break; // It's not here
+				return false; // It's not here
 		} 
-	
-		return null;
 	}
 
 	/* The randomized propagation upwards */
