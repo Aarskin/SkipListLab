@@ -35,59 +35,77 @@ public class Testbench {
 		try {
 			writer = new PrintWriter("run_report" + System.currentTimeMillis() + ".txt", "UTF-8");
 
-			System.out.println("Running randomInsert");
+			System.out.println("Start - randomInsert");
 			randomInsert(INSERT_COUNT);
-			writer.println("TEST: randomInsert");
-			writer.println("RUNTIME DATA SET: [0," + RUNTIME_DATA_SET + "]");
-			writer.println("INSERT COUNT: " + INSERT_COUNT);
-			writer.println(skipList.print());
-			writer.println(searchComparisons());
-			writer.println();
+			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			writer.println("|             TEST : randomInsert");
+			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
+			writer.println("|     INSERT COUNT : " + INSERT_COUNT);
+			writer.println("| AVG. COMPARISONS : " + searchComparisons());
+			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			//writer.println(skipList.toString());
+			System.out.println("Finish - randomInsert");
 
-			System.out.println("Running clusteredValues");
+			System.out.println("Start -  clusteredValues");
 			skipList = new SkipList<Integer>();
 			clusteredValues(INSERT_COUNT);
-			writer.println("TEST: clusteredValues");
-			writer.println("RUNTIME DATA SET: [0," + RUNTIME_DATA_SET + "]");
-			writer.println("INSERT COUNT: " + INSERT_COUNT);
-			writer.println(skipList.print());
-			writer.println();
+			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			writer.println("|             TEST : clusteredValues");
+			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
+			writer.println("|     INSERT COUNT : " + INSERT_COUNT);
+			writer.println("| AVG. COMPARISONS : " + searchComparisons());
+			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			//writer.println(skipList.toString());
+			System.out.println("Finish -  clusteredValues");
 
-			System.out.println("Running increasingOrder (no repeats)");
+			System.out.println("Start - increasingOrder (no repeats)");
 			skipList = new SkipList<Integer>();
 			increasingOrder(INSERT_COUNT, false);
-			writer.println("TEST: increasingOrder (no repeats)");
-			writer.println("RUNTIME DATA SET: [0," + RUNTIME_DATA_SET + "]");
-			writer.println("INSERT COUNT: " + INSERT_COUNT);
-			writer.println(skipList.print());
-			writer.println();		
+			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			writer.println("|             TEST : increasingOrder (no repeats)");
+			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
+			writer.println("|     INSERT COUNT : " + INSERT_COUNT);
+			writer.println("| AVG. COMPARISONS : " + searchComparisons());
+			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			System.out.println("Failpoint 13");
+			//writer.println(skipList.toString());
+			System.out.println("Finish - increasingOrder (no repeats)");
 
-			System.out.println("Running increasingOrder (repeats)");
+			System.out.println("Start - increasingOrder (repeats)");
 			skipList = new SkipList<Integer>();
 			increasingOrder(INSERT_COUNT, true);
-			writer.println("TEST: increasingOrder (repeats)");
-			writer.println("RUNTIME DATA SET: [0," + RUNTIME_DATA_SET + "]");
-			writer.println("INSERT COUNT: " + INSERT_COUNT);
-			writer.println(skipList.print());
-			writer.println();	
+			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			writer.println("|             TEST : increasingOrder (repeats)");
+			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
+			writer.println("|     INSERT COUNT : " + INSERT_COUNT);
+			writer.println("| AVG. COMPARISONS : " + searchComparisons());
+			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			//writer.println(skipList.toString());
+			System.out.println("Finish - increasingOrder (repeats)");
 
-			System.out.println("Running decreasingOrder (no repeats)");
+			System.out.println("Start - decreasingOrder (no repeats)");
 			skipList = new SkipList<Integer>();
 			decreasingOrder(INSERT_COUNT, true);
-			writer.println("TEST: decreasingOrder (no repeats)");
-			writer.println("RUNTIME DATA SET: [0," + RUNTIME_DATA_SET + "]");
-			writer.println("INSERT COUNT: " + INSERT_COUNT);
-			writer.println(skipList.print());
-			writer.println();	
+			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			writer.println("|             TEST : decreasingOrder (no repeats)");
+			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
+			writer.println("|     INSERT COUNT : " + INSERT_COUNT);
+			writer.println("| AVG. COMPARISONS : " + searchComparisons());
+			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			//writer.println(skipList.toString());
+			System.out.println("Finish - decreasingOrder (no repeats)");
 
-			System.out.println("Running decreasingOrder (repeats)");
+			System.out.println("Start - decreasingOrder (repeats)");
 			skipList = new SkipList<Integer>();
 			decreasingOrder(INSERT_COUNT, true);
-			writer.println("TEST: decreasingOrder (repeats)");
-			writer.println("RUNTIME DATA SET: [0," + RUNTIME_DATA_SET + "]");
-			writer.println("INSERT COUNT: " + INSERT_COUNT);
-			writer.println(skipList.print());
-			writer.println();
+			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			writer.println("|             TEST : decreasingOrder (repeats)");
+			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
+			writer.println("|     INSERT COUNT : " + INSERT_COUNT);
+			writer.println("| AVG. COMPARISONS : " + searchComparisons());
+			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			//writer.println(skipList.toString());
+			System.out.println("Finish - decreasingOrder (repeats)");
 			
 			writer.close();
 		} catch (FileNotFoundException e) {
@@ -157,7 +175,7 @@ public class Testbench {
 		}
 	}
 	
-	public static String searchComparisons() {
+	public static int searchComparisons() {
 		ArrayList<Integer> searchTimes = new ArrayList<Integer>();
 		for (int i = 0; i < RUNTIME_DATA_SET; i++) {
 			searchTimes.add(skipList.search(i));
@@ -168,7 +186,7 @@ public class Testbench {
 			sum += time;
 		}
 		
-		return "Average comparisons: " + (sum / searchTimes.size());
+		return (sum / searchTimes.size());
 	}
 
 }
