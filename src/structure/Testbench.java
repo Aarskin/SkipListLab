@@ -9,8 +9,8 @@ import java.util.Random;
 public class Testbench {
 	
 	//** BEGIN TEST CONFIGURATION VARIABLES **//
-	static int RUNTIME_DATA_SET = 1000;   // (0, RUNTIME_DATA_SET)
-	static int INSERT_COUNT     = 1000;   // How many iterations to run tests
+	static int RUNTIME_DATA_SET = 1000000;   // (0, RUNTIME_DATA_SET)
+	static int INSERT_COUNT     = 10000;   // How many iterations to run tests
 	//** END TEST CONFIGURATION VARIABLES **//
 	
 	//** INSTANTIATE SKIPLIST **//
