@@ -66,7 +66,6 @@ public class Testbench {
 			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
 			writer.println("|     INSERT COUNT : " + INSERT_COUNT);
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
-			System.out.println("Failpoint 13");
 			writer.println(skipList.toString());
 			System.out.println("Finish - increasingOrder (no repeats)");
 
@@ -141,12 +140,12 @@ public class Testbench {
 		}
 	}
 	
-	public static void decreasingOrder(int count, boolean repeat) {
+	public static void decreasingOrder(int count, boolean repeat, boolean increased) {
 		Random r = new Random();
 		
 		if (!repeat)
 			for (int i = count; i > 0; i--)
-				skipList.insert(i);
+				skipList.insert(i, increased);
 		else {
 			int smallest = RUNTIME_DATA_SET, t;
 			for (int i = count; i > 0; i--) {
