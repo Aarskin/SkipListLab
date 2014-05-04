@@ -228,8 +228,6 @@ public class SkipList<T extends Comparable<T>>
 				B = A.right;
 				front = front.up;
 				end = end.up;
-				System.out.println(A.value);
-				System.out.println("Path 1");
 			}
 			else if(front.up != null)
 			{ // Move up a row (more calculating)
@@ -237,14 +235,12 @@ public class SkipList<T extends Comparable<T>>
 				{	// Find the closest node to the left that
 					// has a copy in the above level
 					A = A.left;
-					System.out.println(A.value);
 				}
 				
 				A = A.up;
 				B = A.right;
 				front = front.up;
 				end = end.up;
-				System.out.println("Path 2");
 			}
 			else // Create new top level
 			{
@@ -259,10 +255,8 @@ public class SkipList<T extends Comparable<T>>
 				end = B;
 				// Link 'em
 				front.linkRight(end);
-				System.out.println("Path 3");
 			}
 
-			System.out.println("Insertion after: " + A.value + " (" + A.isTail + ")");
 			// Insert node at this level
 			A.linkRight(clone);
 			B.linkLeft(clone);
