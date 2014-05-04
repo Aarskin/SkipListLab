@@ -26,14 +26,12 @@ public class SkipList<T extends Comparable<T>>
 	
 	public void insert(T val)
 	{
-		System.out.println("Insert: " + val);
 		foundIt = false;
 		
 		// Run to the end of this row
 		SkipNode<T> temp = tail;
 		while(!temp.isTail)
 		{
-			System.out.println("Failpoint 9");
 			temp = temp.right;
 		}
 		
@@ -45,10 +43,8 @@ public class SkipList<T extends Comparable<T>>
 		
 		while(true) // Search for the final insertion point
 		{			
-			System.out.println("Failpoint 5");
 			do // Find the column where it belongs
 			{			
-				System.out.println("Failpoint 12");
 				if(A.compareTo(value) < 0)
 				{					
 					if(value.compareTo(B) < 0) 
@@ -85,15 +81,10 @@ public class SkipList<T extends Comparable<T>>
 			}
 			else // Between A and B is where the node will be inserted
 			{
-				System.out.println("Insertion point found: " + A.value + " >-< " + B.value);
-				System.out.println("Failpoint 6");
 				propagate(A, B, front, end, value);
-				System.out.println("Failpoint 7");
 				break;
 			}
 		}
-		
-		System.out.println("Failpoint 8");
 	}
 	
 	/* Returns the node in the highest row containing the value 'find' */
@@ -111,10 +102,8 @@ public class SkipList<T extends Comparable<T>>
 		
 		while(true) // Until we're done
 		{
-			System.out.println("Failpoint 10");
 			do // Find the column where it is (for this row)
 			{
-				System.out.println("Failpoint 11");
 				comparisons ++;
 				if(A.compareTo(value) < 0)
 				{
@@ -131,13 +120,11 @@ public class SkipList<T extends Comparable<T>>
 					}
 					else // It equals B
 					{
-						//return B;
 						return comparisons;
 					}
 				}
 				else if(A.compareTo(value) == 0)
 				{ // I don't think this ever fires, but just in case
-					//return A;
 					return comparisons;
 				}
 				else
@@ -156,8 +143,8 @@ public class SkipList<T extends Comparable<T>>
 			}
 			else	// It's not here
 				break;
-		} 
-		//return null;
+		}
+		
 		return 0;
 	}
 	
@@ -218,17 +205,18 @@ public class SkipList<T extends Comparable<T>>
 	}
 
 	/* The randomized propagation upwards */
-	private void propagate(SkipNode<T> A_prop, SkipNode<T> B_prop, 
-						   SkipNode<T> front_prop, SkipNode<T> end_prop, 
+	private void propagate(SkipNode<T> A, SkipNode<T> B, 
+						   SkipNode<T> front, SkipNode<T> end, 
 						   SkipNode<T> insert) 
 	{
 		SkipNode<T> clone, rowBelow;
 		Random random = new Random();
 		float f = random.nextFloat();
 		int flip = Math.round(f);
+		boolean newLevel = false;
 		
-		A_prop.linkRight(insert);
-		B_prop.linkLeft(insert);
+		A.linkRight(insert);
+		B.linkLeft(insert);
 		rowBelow = insert;
 		
 		System.out.println("Failpoint 1");
@@ -237,50 +225,50 @@ public class SkipList<T extends Comparable<T>>
 			System.out.println("Failpoint 2");
 			clone = insert.clone();
 			
-			if(A_prop.up != null)
+			if(A.up != null)
 			{ // Move up a row
-				A_prop = A_prop.up;
-				B_prop = A_prop.right;
-				front_prop = front_prop.up;
-				end_prop = end_prop.up;
-				System.out.println(A_prop.value);
+				A = A.up;
+				B = A.right;
+				front = front.up;
+				end = end.up;
+				System.out.println(A.value);
 				System.out.println("Path 1");
 			}
-			else if(front_prop.up != null)
+			else if(front.up != null)
 			{ // Move up a row (more calculating)
-				while(A_prop.up == null)
+				while(A.up == null)
 				{	// Find the closest node to the left that
 					// has a copy in the above level
-					A_prop = A_prop.left;
-					System.out.println(A_prop.value);
+					A = A.left;
+					System.out.println(A.value);
 				}
 				
-				A_prop = A_prop.up;
-				B_prop = A_prop.right;
-				front_prop = front_prop.up;
-				end_prop = end_prop.up;
+				A = A.up;
+				B = A.right;
+				front = front.up;
+				end = end.up;
 				System.out.println("Path 2");
 			}
 			else // Create new top level
 			{
 				// Make new terminal nodes
-				A_prop = new SkipNode<T>("HEAD");
-				B_prop = new SkipNode<T>("TAIL");
+				A = new SkipNode<T>("HEAD");
+				B = new SkipNode<T>("TAIL");
 				// Link them to the current ones
-				front_prop.linkUp(A_prop);
-				end_prop.linkUp(B_prop);
+				front.linkUp(A);
+				end.linkUp(B);
 				// Update current front/end
-				front_prop = A_prop;
-				end_prop = B_prop;
+				front = A;
+				end = B;
 				// Link 'em
-				front_prop.linkRight(end_prop);
+				front.linkRight(end);
 				System.out.println("Path 3");
 			}
 
-			System.out.println("Insertion after: " + A_prop.value + " (" + A_prop.isTail + ")");
+			System.out.println("Insertion after: " + A.value + " (" + A.isTail + ")");
 			// Insert node at this level
-			A_prop.linkRight(clone);
-			B_prop.linkLeft(clone);
+			A.linkRight(clone);
+			B.linkLeft(clone);
 			clone.linkDown(rowBelow);
 			rowBelow = clone;
 			
@@ -289,12 +277,12 @@ public class SkipList<T extends Comparable<T>>
 		}
 		
 		// Don't forget to update the global head and tail for the list
-		while(front_prop.up != null)
+		while(front.up != null)
 		{
 			System.out.println("Failpoint 3");
-			front_prop = front_prop.up;
+			front = front.up;
 		}
-		head = front_prop;
+		head = front;
 		tail = head.right;
 		System.out.println("Failpoint 4");
 	}

@@ -43,7 +43,7 @@ public class Testbench {
 			writer.println("|     INSERT COUNT : " + INSERT_COUNT);
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
 			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-			//writer.println(skipList.toString());
+			writer.println(skipList.toString());
 			System.out.println("Finish - randomInsert");
 
 			System.out.println("Start -  clusteredValues");
@@ -55,7 +55,7 @@ public class Testbench {
 			writer.println("|     INSERT COUNT : " + INSERT_COUNT);
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
 			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-			//writer.println(skipList.toString());
+			writer.println(skipList.toString());
 			System.out.println("Finish -  clusteredValues");
 
 			System.out.println("Start - increasingOrder (no repeats)");
@@ -68,7 +68,7 @@ public class Testbench {
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
 			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			System.out.println("Failpoint 13");
-			//writer.println(skipList.toString());
+			writer.println(skipList.toString());
 			System.out.println("Finish - increasingOrder (no repeats)");
 
 			System.out.println("Start - increasingOrder (repeats)");
@@ -80,7 +80,7 @@ public class Testbench {
 			writer.println("|     INSERT COUNT : " + INSERT_COUNT);
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
 			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-			//writer.println(skipList.toString());
+			writer.println(skipList.toString());
 			System.out.println("Finish - increasingOrder (repeats)");
 
 			System.out.println("Start - decreasingOrder (no repeats)");
@@ -92,7 +92,7 @@ public class Testbench {
 			writer.println("|     INSERT COUNT : " + INSERT_COUNT);
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
 			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-			//writer.println(skipList.toString());
+			writer.println(skipList.toString());
 			System.out.println("Finish - decreasingOrder (no repeats)");
 
 			System.out.println("Start - decreasingOrder (repeats)");
@@ -104,7 +104,7 @@ public class Testbench {
 			writer.println("|     INSERT COUNT : " + INSERT_COUNT);
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
 			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-			//writer.println(skipList.toString());
+			writer.println(skipList.toString());
 			System.out.println("Finish - decreasingOrder (repeats)");
 			
 			writer.close();
