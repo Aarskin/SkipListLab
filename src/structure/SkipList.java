@@ -24,8 +24,9 @@ public class SkipList<T extends Comparable<T>>
 		head.linkRight(tail);
 	}
 	
-	public void insert(T val)
+	public void insert(T val, boolean limit)
 	{
+		System.out.println("Insert: " + val);
 		foundIt = false;
 		
 		// Run to the end of this row
@@ -81,7 +82,7 @@ public class SkipList<T extends Comparable<T>>
 			}
 			else // Between A and B is where the node will be inserted
 			{
-				propagate(A, B, front, end, value);
+				propagate(A, B, front, end, value, limit);
 				break;
 			}
 		}
@@ -232,7 +233,7 @@ public class SkipList<T extends Comparable<T>>
 	/* The randomized propagation upwards */
 	private void propagate(SkipNode<T> A, SkipNode<T> B, 
 						   SkipNode<T> front, SkipNode<T> end, 
-						   SkipNode<T> insert) 
+						   SkipNode<T> insert, boolean limit) 
 	{
 		SkipNode<T> clone, rowBelow;
 		Random random = new Random();
@@ -244,8 +245,11 @@ public class SkipList<T extends Comparable<T>>
 		B.linkLeft(insert);
 		rowBelow = insert;
 		
-		while(flip != 0 && !newLevel)
+		while(flip != 0)
 		{
+			if(limit && !newLevel)
+				break;
+			
 			clone = insert.clone();
 			
 			if(A.up != null)
