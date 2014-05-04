@@ -9,8 +9,8 @@ import java.util.Random;
 public class Testbench {
 	
 	//** BEGIN TEST CONFIGURATION VARIABLES **//
-	static int RUNTIME_DATA_SET = 1000;   // (0, RUNTIME_DATA_SET)
-	static int INSERT_COUNT     = 1000;   // How many iterations to run tests
+	static int RUNTIME_DATA_SET = 1000000;   // (0, RUNTIME_DATA_SET)
+	static int INSERT_COUNT     = 10000;   // How many iterations to run tests
 	//** END TEST CONFIGURATION VARIABLES **//
 	
 	//** INSTANTIATE SKIPLIST **//
@@ -34,7 +34,9 @@ public class Testbench {
 		PrintWriter writer;
 		try {
 			writer = new PrintWriter("run_report" + System.currentTimeMillis() + ".txt", "UTF-8");
-
+			
+			System.out.println("Begin Testbench");
+			
 			System.out.println("Start - randomInsert");
 			randomInsert(INSERT_COUNT);
 			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -42,7 +44,6 @@ public class Testbench {
 			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
 			writer.println("|     INSERT COUNT : " + INSERT_COUNT);
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
-			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			writer.println(skipList.toString());
 			System.out.println("Finish - randomInsert");
 
@@ -54,7 +55,6 @@ public class Testbench {
 			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
 			writer.println("|     INSERT COUNT : " + INSERT_COUNT);
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
-			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			writer.println(skipList.toString());
 			System.out.println("Finish -  clusteredValues");
 
@@ -66,7 +66,6 @@ public class Testbench {
 			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
 			writer.println("|     INSERT COUNT : " + INSERT_COUNT);
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
-			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			System.out.println("Failpoint 13");
 			writer.println(skipList.toString());
 			System.out.println("Finish - increasingOrder (no repeats)");
@@ -79,19 +78,17 @@ public class Testbench {
 			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
 			writer.println("|     INSERT COUNT : " + INSERT_COUNT);
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
-			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			writer.println(skipList.toString());
 			System.out.println("Finish - increasingOrder (repeats)");
 
 			System.out.println("Start - decreasingOrder (no repeats)");
 			skipList = new SkipList<Integer>();
-			decreasingOrder(INSERT_COUNT, true);
+			decreasingOrder(INSERT_COUNT, false);
 			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			writer.println("|             TEST : decreasingOrder (no repeats)");
 			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
 			writer.println("|     INSERT COUNT : " + INSERT_COUNT);
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
-			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			writer.println(skipList.toString());
 			System.out.println("Finish - decreasingOrder (no repeats)");
 
@@ -103,9 +100,10 @@ public class Testbench {
 			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
 			writer.println("|     INSERT COUNT : " + INSERT_COUNT);
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
-			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			writer.println(skipList.toString());
 			System.out.println("Finish - decreasingOrder (repeats)");
+			
+			System.out.println("Finish Testbench");
 			
 			writer.close();
 		} catch (FileNotFoundException e) {
@@ -135,10 +133,10 @@ public class Testbench {
 			for (int i = 0; i < count; i++) {
 				do {
 					t = r.nextInt(RUNTIME_DATA_SET);
-				}
-				while (t <= biggest);
+				} while (t < biggest);
 				
-				skipList.insert(biggest = t);
+				biggest = t;
+				skipList.insert(t);
 			}
 		}
 	}
@@ -154,9 +152,10 @@ public class Testbench {
 			for (int i = count; i > 0; i--) {
 				do {
 					t = r.nextInt(RUNTIME_DATA_SET);
-				} while (t >= smallest);
+				} while (t > smallest);
 				
-				skipList.insert(smallest = t);
+				smallest = t;
+				skipList.insert(t);
 			}
 		}
 	}
