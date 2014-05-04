@@ -203,6 +203,32 @@ public class SkipList<T extends Comparable<T>>
 		       "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" + out;
 	}
 
+	public void print()
+	{
+		SkipNode<T> start = head;
+		System.out.println("--------------------------------------------------------------");
+		
+		while(start != null)
+		{
+			System.out.print(start.value);
+			System.out.print(" --- ");
+			SkipNode<T> curr = start.right;
+			
+			while(!curr.isTail)
+			{
+				System.out.print(curr.value);
+				System.out.print(" --- ");
+				curr = curr.right;
+			}
+			
+			System.out.print(curr.value);
+			System.out.println();
+			
+			start = start.down;
+		}
+		System.out.println("--------------------------------------------------------------");
+	}
+
 	/* The randomized propagation upwards */
 	private void propagate(SkipNode<T> A, SkipNode<T> B, 
 						   SkipNode<T> front, SkipNode<T> end, 
@@ -218,7 +244,7 @@ public class SkipList<T extends Comparable<T>>
 		B.linkLeft(insert);
 		rowBelow = insert;
 		
-		while(flip != 0)
+		while(flip != 0 && !newLevel)
 		{
 			clone = insert.clone();
 			
@@ -244,6 +270,8 @@ public class SkipList<T extends Comparable<T>>
 			}
 			else // Create new top level
 			{
+				newLevel = true;
+				
 				// Make new terminal nodes
 				A = new SkipNode<T>("HEAD");
 				B = new SkipNode<T>("TAIL");
@@ -274,31 +302,5 @@ public class SkipList<T extends Comparable<T>>
 		}
 		head = front;
 		tail = head.right;
-	}
-	
-	public void print()
-	{
-		SkipNode<T> start = head;
-		System.out.println("--------------------------------------------------------------");
-		
-		while(start != null)
-		{
-			System.out.print(start.value);
-			System.out.print(" --- ");
-			SkipNode<T> curr = start.right;
-			
-			while(!curr.isTail)
-			{
-				System.out.print(curr.value);
-				System.out.print(" --- ");
-				curr = curr.right;
-			}
-			
-			System.out.print(curr.value);
-			System.out.println();
-			
-			start = start.down;
-		}
-		System.out.println("--------------------------------------------------------------");
 	}
 }
