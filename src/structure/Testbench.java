@@ -38,7 +38,7 @@ public class Testbench {
 			System.out.println("Begin Testbench");
 			
 			System.out.println("Start - randomInsert");
-			randomInsert(INSERT_COUNT, false);
+			randomInsert(INSERT_COUNT, true);
 			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			writer.println("|             TEST : randomInsert");
 			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
@@ -46,10 +46,11 @@ public class Testbench {
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
 			writer.println(skipList.toString());
 			System.out.println("Finish - randomInsert");
+			System.out.println("----------------------------------");
 
 			System.out.println("Start -  clusteredValues");
 			skipList = new SkipList<Integer>();
-			clusteredValues(INSERT_COUNT, false);
+			clusteredValues(INSERT_COUNT, true);
 			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			writer.println("|             TEST : clusteredValues");
 			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
@@ -57,10 +58,11 @@ public class Testbench {
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
 			writer.println(skipList.toString());
 			System.out.println("Finish -  clusteredValues");
+			System.out.println("----------------------------------");
 
 			System.out.println("Start - increasingOrder (no repeats)");
 			skipList = new SkipList<Integer>();
-			increasingOrder(INSERT_COUNT, false, false);
+			increasingOrder(INSERT_COUNT, false, true);
 			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			writer.println("|             TEST : increasingOrder (no repeats)");
 			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
@@ -68,10 +70,11 @@ public class Testbench {
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
 			writer.println(skipList.toString());
 			System.out.println("Finish - increasingOrder (no repeats)");
+			System.out.println("----------------------------------");
 
 			System.out.println("Start - increasingOrder (repeats)");
 			skipList = new SkipList<Integer>();
-			increasingOrder(INSERT_COUNT, true, false);
+			increasingOrder(INSERT_COUNT, true, true);
 			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			writer.println("|             TEST : increasingOrder (repeats)");
 			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
@@ -79,10 +82,11 @@ public class Testbench {
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
 			writer.println(skipList.toString());
 			System.out.println("Finish - increasingOrder (repeats)");
+			System.out.println("----------------------------------");
 
 			System.out.println("Start - decreasingOrder (no repeats)");
 			skipList = new SkipList<Integer>();
-			decreasingOrder(INSERT_COUNT, false, false);
+			decreasingOrder(INSERT_COUNT, false, true);
 			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			writer.println("|             TEST : decreasingOrder (no repeats)");
 			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
@@ -90,10 +94,11 @@ public class Testbench {
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
 			writer.println(skipList.toString());
 			System.out.println("Finish - decreasingOrder (no repeats)");
+			System.out.println("----------------------------------");
 
 			System.out.println("Start - decreasingOrder (repeats)");
 			skipList = new SkipList<Integer>();
-			decreasingOrder(INSERT_COUNT, true, false);
+			decreasingOrder(INSERT_COUNT, true, true);
 			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			writer.println("|             TEST : decreasingOrder (repeats)");
 			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
@@ -101,7 +106,9 @@ public class Testbench {
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
 			writer.println(skipList.toString());
 			System.out.println("Finish - decreasingOrder (repeats)");
+			System.out.println("----------------------------------");
 			
+			System.out.println();
 			System.out.println("Finish Testbench");
 			
 			writer.close();
