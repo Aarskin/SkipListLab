@@ -1,0 +1,30 @@
+What types of data sets did you construct?
+
+	-We constructed data sets from 1..x where x is an integer ranging from 100 to 1000000
+	-We used these data sets in tests that performed between 100 and 100000 inserts
+	-These tests include:
+		//INSERT
+		// - Increasing order without repeats
+		// - Increasing order with repeats
+		// - Decreasing order without repeats
+		// - Decreasing order with repeats
+		// - Clustered values
+		// - Random
+		//
+		//SEARCH
+		// - Get number of comparisons used in search
+		//     for ~every~ number in data set
+
+Did you compare different ways of extending the Skip list?
+
+
+
+What did you discover about the height of the skip list?
+	
+	-At least in our tests, the height of our skiplist was on average 1 or 2 elements higher than the expected height of log(n)
+	-This discrepency was higher with more inserts
+	-We visually graph our tree with periods, with the advantage that everything is formatted correctly and the disadvantage that we can't see more information about the elements (ie. their value)
+
+How did you design data sets for analyzing the query time?
+
+	-I don't really get what this question is asking. What 
