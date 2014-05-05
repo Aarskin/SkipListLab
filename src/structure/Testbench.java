@@ -12,7 +12,7 @@ public class Testbench {
 	static int RUNTIME_DATA_SET = 1000000;   // (0, RUNTIME_DATA_SET)
 	static int INSERT_COUNT     = 10000;   // How many iterations to run tests
 	
-	//** GLOBAL VARIABLSE **//
+	//** GLOBAL VARIABLES **//
 	static PrintWriter writer;
 	
 	//** INSTANTIATE SKIPLIST **//
