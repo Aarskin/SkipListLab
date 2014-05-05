@@ -38,7 +38,7 @@ public class Testbench {
 			System.out.println("Begin Testbench");
 			
 			System.out.println("Start - randomInsert");
-			randomInsert(INSERT_COUNT);
+			randomInsert(INSERT_COUNT, true);
 			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			writer.println("|             TEST : randomInsert");
 			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
@@ -46,10 +46,11 @@ public class Testbench {
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
 			writer.println(skipList.toString());
 			System.out.println("Finish - randomInsert");
+			System.out.println("----------------------------------");
 
 			System.out.println("Start -  clusteredValues");
 			skipList = new SkipList<Integer>();
-			clusteredValues(INSERT_COUNT);
+			clusteredValues(INSERT_COUNT, true);
 			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			writer.println("|             TEST : clusteredValues");
 			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
@@ -57,22 +58,23 @@ public class Testbench {
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
 			writer.println(skipList.toString());
 			System.out.println("Finish -  clusteredValues");
+			System.out.println("----------------------------------");
 
 			System.out.println("Start - increasingOrder (no repeats)");
 			skipList = new SkipList<Integer>();
-			increasingOrder(INSERT_COUNT, false);
+			increasingOrder(INSERT_COUNT, false, true);
 			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			writer.println("|             TEST : increasingOrder (no repeats)");
 			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
 			writer.println("|     INSERT COUNT : " + INSERT_COUNT);
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
-			System.out.println("Failpoint 13");
 			writer.println(skipList.toString());
 			System.out.println("Finish - increasingOrder (no repeats)");
+			System.out.println("----------------------------------");
 
 			System.out.println("Start - increasingOrder (repeats)");
 			skipList = new SkipList<Integer>();
-			increasingOrder(INSERT_COUNT, true);
+			increasingOrder(INSERT_COUNT, true, true);
 			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			writer.println("|             TEST : increasingOrder (repeats)");
 			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
@@ -80,10 +82,11 @@ public class Testbench {
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
 			writer.println(skipList.toString());
 			System.out.println("Finish - increasingOrder (repeats)");
+			System.out.println("----------------------------------");
 
 			System.out.println("Start - decreasingOrder (no repeats)");
 			skipList = new SkipList<Integer>();
-			decreasingOrder(INSERT_COUNT, false);
+			decreasingOrder(INSERT_COUNT, false, true);
 			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			writer.println("|             TEST : decreasingOrder (no repeats)");
 			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
@@ -91,10 +94,11 @@ public class Testbench {
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
 			writer.println(skipList.toString());
 			System.out.println("Finish - decreasingOrder (no repeats)");
+			System.out.println("----------------------------------");
 
 			System.out.println("Start - decreasingOrder (repeats)");
 			skipList = new SkipList<Integer>();
-			decreasingOrder(INSERT_COUNT, true);
+			decreasingOrder(INSERT_COUNT, true, true);
 			writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			writer.println("|             TEST : decreasingOrder (repeats)");
 			writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
@@ -102,7 +106,9 @@ public class Testbench {
 			writer.println("| AVG. COMPARISONS : " + searchComparisons());
 			writer.println(skipList.toString());
 			System.out.println("Finish - decreasingOrder (repeats)");
+			System.out.println("----------------------------------");
 			
+			System.out.println();
 			System.out.println("Finish Testbench");
 			
 			writer.close();
@@ -115,19 +121,19 @@ public class Testbench {
 		}
 	}
 	
-	public static void randomInsert(int count) {
+	public static void randomInsert(int count, boolean increased) {
 		Random r = new Random();
 		
 		for (int i = 0; i < count; i++)
-			skipList.insert(r.nextInt(RUNTIME_DATA_SET));
+			skipList.insert(r.nextInt(RUNTIME_DATA_SET), increased);
 	}
 	
-	public static void increasingOrder(int count, boolean repeat) {
+	public static void increasingOrder(int count, boolean repeat, boolean increased) {
 		Random r = new Random();
 		
 		if (!repeat)
 			for (int i = 0; i < count; i++)
-				skipList.insert(i);
+				skipList.insert(i, increased);
 		else {
 			int biggest = 0, t;
 			for (int i = 0; i < count; i++) {
@@ -136,17 +142,17 @@ public class Testbench {
 				} while (t < biggest);
 				
 				biggest = t;
-				skipList.insert(t);
+				skipList.insert(t, increased);
 			}
 		}
 	}
 	
-	public static void decreasingOrder(int count, boolean repeat) {
+	public static void decreasingOrder(int count, boolean repeat, boolean increased) {
 		Random r = new Random();
 		
 		if (!repeat)
 			for (int i = count; i > 0; i--)
-				skipList.insert(i);
+				skipList.insert(i, increased);
 		else {
 			int smallest = RUNTIME_DATA_SET, t;
 			for (int i = count; i > 0; i--) {
@@ -155,12 +161,12 @@ public class Testbench {
 				} while (t > smallest);
 				
 				smallest = t;
-				skipList.insert(t);
+				skipList.insert(t, increased);
 			}
 		}
 	}
 	
-	public static void clusteredValues(int count) {
+	public static void clusteredValues(int count, boolean increased) {
 		Random r = new Random();
 		int clusterVal;
 		
@@ -168,7 +174,7 @@ public class Testbench {
 			clusterVal = r.nextInt(RUNTIME_DATA_SET);
 			
 			for (int j = 0; j < r.nextInt(count / 50); j++) {
-				skipList.insert(clusterVal);
+				skipList.insert(clusterVal, increased);
 				i ++;
 			}
 		}

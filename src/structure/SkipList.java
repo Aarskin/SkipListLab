@@ -26,7 +26,7 @@ public class SkipList<T extends Comparable<T>>
 	
 	public void insert(T val, boolean limit)
 	{
-		System.out.println("Insert: " + val);
+		//System.out.println("Insert: " + val);
 		foundIt = false;
 		
 		// Run to the end of this row
@@ -152,40 +152,41 @@ public class SkipList<T extends Comparable<T>>
 	public String toString()
 	{
 		int height = 0, width = 0;
-		A = head;
+		SkipNode<T> traverse = head;
 		
-		while (A.down != null) {
-			A = A.down;
-			height ++;
+		while (traverse.down != null) {
+			traverse = traverse.down;
+			height++;
 		}
 		
-		while (A.right != null) {
-			A = A.right;
+		while (!traverse.isTail) {
+			traverse = traverse.right;
 			width++;
 		}
 		
 		char[][] map = new char[height][width];
+		
 		for (int i = 0; i < map.length; i++) 
 			for (int j = 0; j < map[0].length; j++)
 				map[i][j] = ' ';
 
-		A = head;
-		while (A.down != null)
-			A = A.down;
+		traverse = head;
+		while (traverse.down != null)
+			traverse = traverse.down;
 		
 		int x = 0;
-		while (A.right != null) {
+		while (traverse.right != null) {
 			map[0][x] = '.';
 			
 			int y = 0;
-			B = A;
+			B = traverse;
 			while (B.up != null) {
 				map[y][x] = '.';
 				B = B.up;
 				y ++;
 			}
 			
-			A = A.right;
+			traverse = traverse.right;
 			x ++;
 		}
 		
@@ -198,36 +199,11 @@ public class SkipList<T extends Comparable<T>>
 			out += ".\n";
 		}
 
+		System.out.println("Successful Print");
 		return "|           HEIGHT : " + height + "\n" +
 		       "|  EXPECTED HEIGHT : " + Math.log(width) + "\n" +
 		       "|            WIDTH : " + width + "\n" + 
 		       "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" + out;
-	}
-
-	public void print()
-	{
-		SkipNode<T> start = head;
-		System.out.println("--------------------------------------------------------------");
-		
-		while(start != null)
-		{
-			System.out.print(start.value);
-			System.out.print(" --- ");
-			SkipNode<T> curr = start.right;
-			
-			while(!curr.isTail)
-			{
-				System.out.print(curr.value);
-				System.out.print(" --- ");
-				curr = curr.right;
-			}
-			
-			System.out.print(curr.value);
-			System.out.println();
-			
-			start = start.down;
-		}
-		System.out.println("--------------------------------------------------------------");
 	}
 
 	/* The randomized propagation upwards */
@@ -247,7 +223,7 @@ public class SkipList<T extends Comparable<T>>
 		
 		while(flip != 0)
 		{
-			if(limit && !newLevel)
+			if(limit && newLevel)
 				break;
 			
 			clone = insert.clone();

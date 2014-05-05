@@ -17,8 +17,14 @@ What types of data sets did you construct?
 
 Did you compare different ways of extending the Skip list?
 
+
+
 What did you discover about the height of the skip list?
 	
 	-At least in our tests, the height of our skiplist was on average 1 or 2 elements higher than the expected height of log(n)
 	-This discrepency was higher with more inserts
 	-We visually graph our tree with periods, with the advantage that everything is formatted correctly and the disadvantage that we can't see more information about the elements (ie. their value)
+
+How did you design data sets for analyzing the query time?
+
+	-I don't really get what this question is asking. What 
