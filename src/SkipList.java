@@ -14,10 +14,16 @@ public class SkipList<T extends Comparable<T>>
 	
 	private boolean foundIt;
 	
+	private int skip;
+	private int drop;
+	
 	public SkipList()
 	{
 		head = new SkipNode<T>("HEAD");
 		tail = new SkipNode<T>("TAIL");
+		
+		skip = 0;
+		drop = 0;
 		
 		head.linkRight(tail);
 	}
@@ -55,6 +61,7 @@ public class SkipList<T extends Comparable<T>>
 						// Shift 'em right
 						A = A.right;
 						B = B.right;
+						skip++;
 					}
 				}
 				else if(A.compareTo(value) == 0)
@@ -77,6 +84,7 @@ public class SkipList<T extends Comparable<T>>
 				B = A.right;
 				front = front.down;
 				end = end.down;
+				drop++;
 			}
 			else // Between A and B is where the node will be inserted
 			{
@@ -84,6 +92,16 @@ public class SkipList<T extends Comparable<T>>
 				break;
 			}
 		}
+	}
+	
+	public int numSkips()
+	{
+		return skip;
+	}
+	
+	public int numDrops()
+	{
+		return drop;
 	}
 	
 	/* Returns the node in the highest row containing the value 'find' */
