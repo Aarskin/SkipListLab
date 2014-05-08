@@ -1,36 +1,30 @@
-import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-
 public class AvlTest {
 
 static AvlTree tree;
-/**
-* @param args
-*/
-public static void main(String[] args) {
-// TODO Auto-generated method stub
-tree = new AvlTree(10);
 
-ExecutorService es = Executors.newCachedThreadPool();
-        es.execute(t1);
-        es.execute(t2);
-        es.execute(t3);
-        es.execute(t4);
-
-        es.shutdown();
-        try {
-boolean finished = es.awaitTermination(1, TimeUnit.MINUTES);
-} catch (InterruptedException e) {
-// TODO Auto-generated catch block
-e.printStackTrace();
-}
-tree.inorderPrint();
-
-
-
+public static void main(String[] args) 
+{
+		
+	tree = new AvlTree(10);
+	
+	ExecutorService es = Executors.newCachedThreadPool();
+	        es.execute(t1);
+	        es.execute(t2);
+	        es.execute(t3);
+	        es.execute(t4);
+	
+	        es.shutdown();
+	        try {
+	boolean finished = es.awaitTermination(1, TimeUnit.MINUTES);
+	} catch (InterruptedException e) {
+	// TODO Auto-generated catch block
+	e.printStackTrace();
+	}
+	tree.inorderPrint();
 }
 
 
