@@ -14,8 +14,11 @@ public class SkipList<T extends Comparable<T>>
 	
 	private boolean foundIt;
 	
+	// Skip and Drop are essentially a breakdown of comparisons
+	private int comparisons;
 	private int skip;
 	private int drop;
+	private int locks; // For concurrency comparisons
 	
 	public SkipList()
 	{
@@ -24,6 +27,7 @@ public class SkipList<T extends Comparable<T>>
 		
 		skip = 0;
 		drop = 0;
+		locks = 0;
 		
 		head.linkRight(tail);
 	}
@@ -50,6 +54,7 @@ public class SkipList<T extends Comparable<T>>
 		{
 			do // Find the column where it belongs
 			{
+				
 				if(A.compareTo(value) < 0)
 				{					
 					if(value.compareTo(B) < 0) 
@@ -86,7 +91,7 @@ public class SkipList<T extends Comparable<T>>
 				end = end.down;
 				drop++;
 			}
-			else // Between A and B is where the node will be inserted
+			else // Found the insertion point between A and B
 			{
 				propagate(A, B, front, end, value, limit);
 				break;
@@ -104,10 +109,15 @@ public class SkipList<T extends Comparable<T>>
 		return drop;
 	}
 	
+	public int numLocks()
+	{
+		return locks;
+	}
+	
 	/* Returns the node in the highest row containing the value 'find' */
 	public int search(T find)
 	{	
-		int comparisons = 0;
+		comparisons = 0;
 		
 		foundIt = false;
 		
@@ -121,7 +131,8 @@ public class SkipList<T extends Comparable<T>>
 		{
 			do // Find the column where it is (for this row)
 			{
-				comparisons ++;
+				comparisons++;
+				
 				if(A.compareTo(value) < 0)
 				{
 					comparisons ++;
@@ -134,6 +145,7 @@ public class SkipList<T extends Comparable<T>>
 						// Shift 'em right
 						A = A.right;
 						B = B.right;
+						skip++;
 					}
 					else // It equals B
 					{
@@ -157,14 +169,16 @@ public class SkipList<T extends Comparable<T>>
 				B = A.right;
 				front = front.down;
 				end = end.down;
+				drop++; 
 			}
-			else	// It's not here
+			else // It's not here
 				break;
 		}
 		
 		return 0;
 	}
 	
+	/* Prints a dot matrix of this skiplist */
 	public String toString()
 	{
 		int height = 0, width = 0;
@@ -233,6 +247,8 @@ public class SkipList<T extends Comparable<T>>
 		int flip = Math.round(f);
 		boolean newLevel = false;
 		
+		// The insertion at the bottom level
+		locks += 2; // Lock A & B
 		A.linkRight(insert);
 		B.linkLeft(insert);
 		rowBelow = insert;
@@ -242,6 +258,10 @@ public class SkipList<T extends Comparable<T>>
 			if(limit && newLevel)
 				break;
 			
+			/* Need a fresh copy each time or else
+			 * all the references reference the
+			 * original skipnode.
+			 */
 			clone = insert.clone();
 			
 			if(A.up != null)
@@ -282,6 +302,7 @@ public class SkipList<T extends Comparable<T>>
 			}
 
 			// Insert node at this level
+			locks += 2;
 			A.linkRight(clone);
 			B.linkLeft(clone);
 			clone.linkDown(rowBelow);
@@ -291,7 +312,7 @@ public class SkipList<T extends Comparable<T>>
 			flip = Math.round(f);		
 		}
 		
-		// Don't forget to update the global head and tail for the list
+		// Don't forget to update the 'global' starting points for the list
 		while(front.up != null)
 		{
 			front = front.up;
