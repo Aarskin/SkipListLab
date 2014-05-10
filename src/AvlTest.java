@@ -14,6 +14,7 @@ public static void main(String[] args) {
 // TODO Auto-generated method stub
 tree = new AvlTree(10);
 
+
 ExecutorService es = Executors.newCachedThreadPool();
         es.execute(t1);
         es.execute(t2);
@@ -27,8 +28,10 @@ boolean finished = es.awaitTermination(1, TimeUnit.MINUTES);
 // TODO Auto-generated catch block
 e.printStackTrace();
 }
+		
 tree.inorderPrint();
-
+int count = tree.getCount();
+System.out.println(count);
 
 
 }
@@ -74,5 +77,6 @@ private static Runnable t1 = new Runnable() {
             } catch (Exception e){}
        }
     };
+    
 
 }
