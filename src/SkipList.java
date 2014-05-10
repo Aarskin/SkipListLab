@@ -196,8 +196,7 @@ public class SkipList<T extends Comparable<T>>
 
 		return "|           HEIGHT : " + height + "\n" +
 		       "|  EXPECTED HEIGHT : " + Math.log(width) + "\n" +
-		       "|            WIDTH : " + width + "\n" + 
-		       "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
+		       "|            WIDTH : " + width;
 	}
 
 	/* The randomized propagation upwards */
