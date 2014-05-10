@@ -67,11 +67,11 @@ public class Testbench {
 			break;
 		}
 		
-		writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		writer.println("|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|");
 		writer.println("|             TEST : " + test.name());		
 		writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
 		writer.println("|     INSERT COUNT : " + INSERT_COUNT);
-		writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		writer.println("|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|");
 		writer.println("| SKIPLIST DATA");
 		writer.println("|    AVERAGE SKIPS : " + (skipList.numSkips() / INSERT_COUNT));
 		writer.println("|      TOTAL SKIPS : " + skipList.numSkips());
@@ -80,12 +80,12 @@ public class Testbench {
 		writer.println("|    AVERAGE LOCKS : " + (skipList.numLocks() / INSERT_COUNT));
 		writer.println("|      TOTAL LOCKS : " + skipList.numLocks());
 		writer.println(skipList.toString());
-		writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		writer.println("|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|");
 		writer.println("| RED-BLACK TREE DATA");
 		writer.println("|           HEIGHT : " + avlTree.getHeight(avlTree.getHead()));
 		writer.println("|    AVERAGE LOCKS : " + (avlTree.getCount() / INSERT_COUNT));
 		writer.println("|      TOTAL LOCKS : " + avlTree.getCount());
-		writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		writer.println("|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|\n");
 		
 		System.out.println("Finish - " + test.name());
 	}
