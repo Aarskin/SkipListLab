@@ -1,5 +1,6 @@
 public class AvlTree {
 	private AvlNode head, curr;
+	private int count = 0;
 	private boolean DEBUG = false;
 
 	public AvlTree(int value) {
@@ -33,6 +34,10 @@ public class AvlTree {
 		}
 
 		getHead().setLock(); //obtain the lock of the tree when rebalancing
+
+		count++;
+
+
 		if (getBalanceFactor(curr) >= 2) {
 			if (DEBUG)
 				System.out.println("right BF imbalanced");
@@ -67,6 +72,12 @@ public class AvlTree {
 			return getMax(curr.getLeft(), curr.getRight()) + 1;
 		}
 	}
+
+	public int getCount()
+	{
+		return count;
+	}
+
 
 	private int getMax(AvlNode left, AvlNode right) {
 		if (left == null && right == null) {

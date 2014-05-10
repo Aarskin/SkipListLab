@@ -9,8 +9,6 @@ public class AvlTest {
 	public static void main(String[] args) 
 	{
 
-		tree = new AvlTree(10);
-
 		ExecutorService es = Executors.newCachedThreadPool();
 		es.execute(t1);
 		es.execute(t2);
@@ -24,7 +22,13 @@ public class AvlTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
 		tree.inorderPrint();
+		int count = tree.getCount();
+		System.out.println(count);
+
+		tree = new AvlTree(10);
+
 	}
 
 
@@ -59,6 +63,7 @@ public class AvlTest {
 		}
 	};
 
+
 	private static Runnable t4 = new Runnable() {
 		public void run() {
 			try{
@@ -68,5 +73,6 @@ public class AvlTest {
 			} catch (Exception e){}
 		}
 	};
+
 
 }
