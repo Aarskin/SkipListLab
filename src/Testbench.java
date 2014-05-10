@@ -66,11 +66,14 @@ public class Testbench {
 			break;
 		}
 		
-		writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		writer.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		writer.println("|             TEST : " + test.name());
 		writer.println("| RUNTIME DATA SET : [0," + RUNTIME_DATA_SET + "]");
 		writer.println("|     INSERT COUNT : " + INSERT_COUNT);
-		writer.println("| AVG. COMPARISONS : " + searchComparisons());
+		writer.println("|    AVERAGE SKIPS : " + (skipList.numSkips() / INSERT_COUNT));
+		writer.println("|    AVERAGE DROPS : " + (skipList.numDrops() / INSERT_COUNT));
+		writer.println("|    AVERAGE LOCKS : " + (skipList.numLocks() / INSERT_COUNT));
+	       
 		writer.println(skipList.toString());
 		System.out.println("Finish - " + test.name());
 	}
@@ -89,14 +92,12 @@ public class Testbench {
 			for (int i = 0; i < count; i++)
 				skipList.insert(i, increased);
 		else {
-			int biggest = 0, t;
 			for (int i = 0; i < count; i++) {
-				do {
-					t = r.nextInt(RUNTIME_DATA_SET);
-				} while (t < biggest);
+				int randomRepeat = r.nextInt(10);
+				for (int j = 0; j < randomRepeat; j++)
+					skipList.insert(i, increased);
 				
-				biggest = t;
-				skipList.insert(t, increased);
+				i += randomRepeat;
 			}
 		}
 	}
@@ -108,14 +109,12 @@ public class Testbench {
 			for (int i = count; i > 0; i--)
 				skipList.insert(i, increased);
 		else {
-			int smallest = RUNTIME_DATA_SET, t;
 			for (int i = count; i > 0; i--) {
-				do {
-					t = r.nextInt(RUNTIME_DATA_SET);
-				} while (t > smallest);
+				int randomRepeat = r.nextInt(10);
+				for (int j = 0; j < randomRepeat; j++)
+					skipList.insert(i, increased);
 				
-				smallest = t;
-				skipList.insert(t, increased);
+				i -= randomRepeat;
 			}
 		}
 	}

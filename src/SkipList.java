@@ -193,47 +193,11 @@ public class SkipList<T extends Comparable<T>>
 			traverse = traverse.right;
 			width++;
 		}
-		
-		char[][] map = new char[height][width];
-		
-		for (int i = 0; i < map.length; i++) 
-			for (int j = 0; j < map[0].length; j++)
-				map[i][j] = ' ';
 
-		traverse = head;
-		while (traverse.down != null)
-			traverse = traverse.down;
-		
-		int x = 0;
-		while (traverse.right != null) {
-			map[0][x] = '.';
-			
-			int y = 0;
-			B = traverse;
-			while (B.up != null) {
-				map[y][x] = '.';
-				B = B.up;
-				y ++;
-			}
-			
-			traverse = traverse.right;
-			x ++;
-		}
-		
-		String out = "";
-		for (int i = map.length - 1; i >= 0; i--) {
-			for (int j = 0; j < map[0].length - 1; j++) {
-				out += map[i][j];
-			}
-			
-			out += ".\n";
-		}
-
-		System.out.println("Successful Print");
 		return "|           HEIGHT : " + height + "\n" +
 		       "|  EXPECTED HEIGHT : " + Math.log(width) + "\n" +
 		       "|            WIDTH : " + width + "\n" + 
-		       "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" + out;
+		       "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n";
 	}
 
 	/* The randomized propagation upwards */
