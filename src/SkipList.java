@@ -302,7 +302,7 @@ public class SkipList<T extends Comparable<T>>
 			}
 
 			// Insert node at this level
-			locks += 2;
+			locks += 3; // A & B & rowBelow
 			A.linkRight(clone);
 			B.linkLeft(clone);
 			clone.linkDown(rowBelow);
